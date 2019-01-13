@@ -1,0 +1,116 @@
+<div class="container-fluid">
+  <br />
+  <div class="row justify-content-center">
+    <div class="col-md-11">
+      
+      <form (ngSubmit)="onSubmit()" #f="ngForm">
+        <div class="form-row">
+          <div class="col-md">
+            <input name="name" id="name" [(ngModel)]="newTea.name" placeholder="Name" class="form-control" #name="ngModel" required>
+            <span class="help-block" *ngIf="!name.valid && name.touched">This field is required!</span>
+          </div>
+          <div class="col-md">
+            <input name="kind" id="kind" [(ngModel)]="newTea.kind" placeholder="Black, green, matcha...?" class="form-control" #kind="ngModel" required>
+            <span class="help-block" *ngIf="!kind.valid && kind.touched">This field is required!</span>
+          </div>
+          <div class="col-md">
+            <select class="form-control" [(ngModel)]="newTea.unit" name="unit">
+              <option hidden disabled selected value value=""> -- select an option -- </option>
+              <option value="box">Box</option>
+              <option value="oz">Oz</option>
+            </select>          
+          </div>
+          <div class="col-md">
+              <input name="imageUrl" id="imageUrl" [(ngModel)]="newTea.imageUrl" placeholder="Image link" class="form-control" #imageUrl="ngModel" required>
+              <span class="help-block" *ngIf="!imageUrl.valid && imageUrl.touched">This field is required!</span>
+            </div>
+          <div class="col-md">
+            <input name="quantity" id="quantity" [(ngModel)]="newTea.quantity" placeholder="Qty" class="form-control" #quantity="ngModel" required type="number" min="0">
+            <span class="help-block" *ngIf="!quantity.valid && quantity.touched">This field is required!</span>
+          </div>
+          <div class="col-md">
+            <input name="price" id="price" [(ngModel)]="newTea.price" placeholder="$$$" class="form-control" #price="ngModel" required type="number" min="0">
+            <span class="help-block" *ngIf="!price.valid && price.touched">This field is required!</span>
+          </div>
+          <div class="col-md">
+            <button [disabled]="!f.valid" type="submit" class="btn btn-primary btn-block" (click)="create()">Add</button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+  </div>
+
+  <br />
+
+  <div class="row justify-content-center">
+    <div class="col-md-11">
+
+      <div class="teas" *ngIf="teasList">
+        <table  class="table table-dark table-striped table-responsive-sm">
+          <thead class="h">
+            <tr class="h">
+              <th class="h">Tea</th>
+              <th class="h">Kind</th>
+              <th class="h mw-25">Url</th>
+              <th class="h">Unit</th>
+              <th class="h">Qty</th>
+              <th class="h">Price</th>
+              <th class="h text-center">Manage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="tea" (dblclick)="editTea(tea)" *ngFor="let tea of teasList">
+
+              <ng-container *ngIf="!editTeas.includes(tea); else editTD">
+                <td>{{tea.name}}</td>
+                <td>{{tea.kind}}</td>
+                <td>[...]</td>
+                <td>{{tea.unit}}</td>
+                <td>{{tea.quantity}}</td>
+                <td>{{tea.price | currency }}</td>
+              </ng-container>
+              <form (ngSubmit)="onSubmit2()" #f2="ngForm">
+                  <ng-template #editTD>
+                      <td>
+                        <input name="name2" id="name2" (keypress)="submitTea($event, tea)" [(ngModel)]="tea.name" placeholder={{tea.name}} class="form-control" #name2="ngModel" required>
+                        <span class="help-block" *ngIf="!name2.valid && name2.touched">This field is required!</span>
+                      </td>
+                      <td>
+                        <input name="kind2" id="kind2" (keypress)="submitTea($event, tea)" [(ngModel)]="tea.kind" placeholder={{tea.kind}} class="form-control" #kind2="ngModel" required>
+                        <span class="help-block" *ngIf="!kind2.valid && kind2.touched">This field is required!</span>
+                      </td>
+                      <td>
+                          <input name="imageUrl2" id="imageUrl2" (keypress)="submitTea($event, tea)" [(ngModel)]="tea.imageUrl" placeholder={{tea.imageUrl}} class="form-control" #imageUrl2="ngModel" required>
+                          <span class="help-block" *ngIf="!imageUrl2.valid && imageUrl2.touched">This field is required!</span>
+                        </td>
+                      <td>
+                          <select class="form-control" [(ngModel)]="tea.unit" name="unit">
+                          <option hidden disabled selected value value=""> -- select an option -- </option>
+                          <option value="box">Box</option>
+                          <option value="oz">Oz</option>
+                        </select>  
+                      </td>
+                      <td>
+                        <input name="quantity2" id="quantity2" (keypress)="submitTea($event, tea)" [(ngModel)]="tea.quantity" placeholder={{tea.quantity}} class="form-control" #quantity2="ngModel" type="number" min="0">
+                        <span class="help-block" *ngIf="!quantity2.valid && quantity2.touched">This field is required!</span>
+                      </td>
+                      <td>
+                        <input name="price2" id="price2" (keypress)="submitTea($event, tea)" [(ngModel)]="tea.price" placeholder={{tea.price}} class="form-control" #price2="ngModel" type="number" min="0">
+                        <span class="help-block" *ngIf="!price2.valid && price2.touched">This field is required!</span>
+                      </td>
+                    </ng-template>
+              </form>
+              <td class="o d-flex justify-content-around">
+                  <button [disabled]="!f2.valid" class="btn btn-primary" (click)="editTea(tea)"><i class="fa fa-pencil"></i></button>
+                  <a class="btn btn-danger" (click)="deleteTea(tea)">
+                    <i class="fa fa-trash"></i>
+                  </a>
+                </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
